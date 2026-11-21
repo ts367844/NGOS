@@ -3,652 +3,121 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NGOS Assignment 1 — Interactive Academic Report</title>
+  <title>NGOS Assignment — Next Generation Operating Systems</title>
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #090e17;
-      --panel: #0f172a;
-      --panel-card: #141f36;
-      --panel-border: #1e293b;
-      --border-accent: #0284c7;
-      --tx: #e2e8f0;
-      --tx-bright: #ffffff;
-      --tx-muted: #94a3b8;
-      --cyan: #38bdf8;
-      --teal: #14b8a6;
-      --teal-dark: #0f766e;
-      --amber: #fbbf24;
-      --green: #22c55e;
-      --purple: #a855f7;
-      --red: #ef4444;
-      --term-bg: #030712;
-      --term-border: #1f2937;
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'Fira Code', 'Consolas', monospace;
-      --font-display: 'Outfit', sans-serif;
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
-    }
-
-    [data-theme="light"] {
-      --bg: #f8fafc;
-      --panel: #ffffff;
-      --panel-card: #f1f5f9;
-      --panel-border: #cbd5e1;
-      --border-accent: #0284c7;
-      --tx: #1e293b;
-      --tx-bright: #0f172a;
-      --tx-muted: #64748b;
-      --cyan: #0284c7;
-      --teal: #0d9488;
-      --teal-dark: #0f766e;
-      --amber: #d97706;
-      --green: #16a34a;
-      --purple: #7e22ce;
-      --red: #dc2626;
-      --term-bg: #0f172a;
-      --term-border: #334155;
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--tx);
-      font-family: var(--font-sans);
-      line-height: 1.6;
-      transition: background 0.3s ease, color 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    /* Top Navigation Bar */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--panel);
-      border-bottom: 1px solid var(--panel-border);
-      padding: 12px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .brand-logo {
-      height: 38px;
-      object-fit: contain;
-    }
-
-    .brand-text h1 {
-      font-family: var(--font-display);
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--tx-bright);
-      line-height: 1.2;
-    }
-
-    .brand-text p {
-      font-size: 0.78rem;
-      color: var(--tx-muted);
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .theme-toggle {
-      background: var(--panel-card);
-      border: 1px solid var(--panel-border);
-      color: var(--tx);
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-    }
-
-    .theme-toggle:hover {
-      border-color: var(--cyan);
-      color: var(--cyan);
-    }
-
-    .btn-download {
-      background: linear-gradient(135deg, var(--teal-dark) 0%, var(--border-accent) 100%);
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-    }
-
-    .btn-download:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    /* Main Container & Layout */
-    .app-layout {
-      display: flex;
-      flex: 1;
-      max-width: 1400px;
-      margin: 0 auto;
-      width: 100%;
-      padding: 24px;
-      gap: 28px;
-    }
-
-    /* Sidebar Navigation */
-    aside.sidebar {
-      width: 270px;
-      flex-shrink: 0;
-      position: sticky;
-      top: 80px;
-      height: fit-content;
-      max-height: calc(100vh - 100px);
-      overflow-y: auto;
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      border-radius: 12px;
-      padding: 16px;
-    }
-
-    .nav-header {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--tx-muted);
-      margin-bottom: 12px;
-      padding-left: 8px;
-    }
-
-    .nav-links {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .nav-links a {
-      display: block;
-      color: var(--tx);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: all 0.2s ease;
-      border-left: 3px solid transparent;
-    }
-
-    .nav-links a:hover {
-      background: var(--panel-card);
-      color: var(--cyan);
-      border-left-color: var(--cyan);
-    }
-
-    /* Content Area */
-    main.content {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    /* Cover / Student Profile Card */
-    .cover-card {
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      border-radius: 14px;
-      padding: 28px;
-      box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .cover-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--teal) 0%, var(--cyan) 50%, var(--amber) 100%);
-    }
-
-    .cover-badges {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 10px;
-      border-radius: 9999px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .badge-teal {
-      background: rgba(20, 184, 166, 0.15);
-      border: 1px solid var(--teal);
-      color: var(--teal);
-    }
-
-    .badge-amber {
-      background: rgba(251, 191, 36, 0.15);
-      border: 1px solid var(--amber);
-      color: var(--amber);
-    }
-
-    .cover-title {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--tx-bright);
-      margin-bottom: 6px;
-    }
-
-    .cover-subtitle {
-      font-size: 0.95rem;
-      color: var(--tx-muted);
-      margin-bottom: 20px;
-    }
-
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-      background: var(--panel-card);
-      border: 1px solid var(--panel-border);
-      border-radius: 10px;
-      padding: 16px;
-    }
-
-    .profile-item {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .profile-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: var(--tx-muted);
-    }
-
-    .profile-val {
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: var(--tx-bright);
-      font-family: var(--font-mono);
-      margin-top: 2px;
-    }
-
-    /* Section Cards */
-    .section-card {
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      border-radius: 14px;
-      padding: 24px;
-      box-shadow: var(--shadow);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--panel-border);
-    }
-
-    .section-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid var(--cyan);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--cyan);
-      font-weight: 700;
-    }
-
-    .section-title {
-      font-family: var(--font-display);
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: var(--tx-bright);
-    }
-
-    /* Q&A Blocks */
-    .qa-block {
-      background: var(--panel-card);
-      border: 1px solid var(--panel-border);
-      border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 18px;
-    }
-
-    .qa-question {
-      font-size: 1.02rem;
-      font-weight: 700;
-      color: var(--cyan);
-      margin-bottom: 10px;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-    }
-
-    .qa-question span.q-badge {
-      background: var(--cyan);
-      color: #000;
-      font-size: 0.72rem;
-      padding: 2px 7px;
-      border-radius: 4px;
-      font-family: var(--font-mono);
-      margin-top: 2px;
-      flex-shrink: 0;
-    }
-
-    .point-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .point-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 0.9rem;
-    }
-
-    .point-bullet {
-      color: var(--teal);
-      font-weight: 800;
-      font-size: 1rem;
-      line-height: 1.4;
-    }
-
-    .point-text strong {
-      color: var(--tx-bright);
-    }
-
-    /* Tables */
-    .table-container {
-      width: 100%;
-      overflow-x: auto;
-      margin: 14px 0;
-      border: 1px solid var(--panel-border);
-      border-radius: 8px;
-    }
-
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-      text-align: left;
-    }
-
-    table.data-table th {
-      background: rgba(15, 23, 42, 0.8);
-      color: var(--cyan);
-      font-family: var(--font-mono);
-      font-weight: 600;
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--panel-border);
-      font-size: 0.82rem;
-      text-transform: uppercase;
-    }
-
-    table.data-table td {
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--panel-border);
-    }
-
-    table.data-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    table.data-table tr:hover td {
-      background: rgba(56, 189, 248, 0.04);
-    }
-
-    /* Gantt Visualizer */
-    .gantt-chart {
-      display: flex;
-      width: 100%;
-      margin: 16px 0;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--panel-border);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    .gantt-block {
-      padding: 10px 6px;
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      position: relative;
-    }
-
-    .gantt-p1 { background: #0284c7; }
-    .gantt-p2 { background: #0d9488; }
-    .gantt-p3 { background: #7c3aed; }
-    .gantt-p4 { background: #ea580c; }
-
-    .gantt-time {
-      font-size: 0.72rem;
-      opacity: 0.85;
-      font-weight: 400;
-    }
-
-    /* Terminal Blocks */
-    .terminal-box {
-      background: var(--term-bg);
-      border: 1px solid var(--term-border);
-      border-radius: 8px;
-      overflow: hidden;
-      margin: 12px 0;
-      font-family: var(--font-mono);
-    }
-
-    .terminal-header {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 6px 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      border-bottom: 1px solid var(--term-border);
-    }
-
-    .term-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .term-dot.red { background: #ef4444; }
-    .term-dot.yellow { background: #f59e0b; }
-    .term-dot.green { background: #10b981; }
-
-    .term-title {
-      font-size: 0.75rem;
-      color: var(--tx-muted);
-      margin-left: 6px;
-    }
-
-    .terminal-body {
-      padding: 14px;
-      font-size: 0.84rem;
-      color: #f1f5f9;
-      line-height: 1.5;
-      overflow-x: auto;
-      white-space: pre;
-    }
-
-    .prompt { color: var(--cyan); }
-    .output { color: #94a3b8; }
-
-    /* Calculations Banner */
-    .calc-banner {
-      background: rgba(14, 116, 144, 0.12);
-      border-left: 3px solid var(--teal);
-      padding: 10px 14px;
-      border-radius: 6px;
-      font-size: 0.88rem;
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .calc-banner strong {
-      color: var(--cyan);
-    }
-
-    footer {
-      background: var(--panel);
-      border-top: 1px solid var(--panel-border);
-      padding: 24px;
-      text-align: center;
-      font-size: 0.82rem;
-      color: var(--tx-muted);
-      margin-top: 40px;
-    }
-
-    @media (max-width: 900px) {
-      .app-layout { flex-direction: column; padding: 16px; }
-      aside.sidebar { width: 100%; position: static; max-height: none; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- GSAP & Three.js CDN Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- External Stylesheet -->
+  <link rel="stylesheet" href="design.css">
 </head>
 <body>
 
   <!-- Top Navbar -->
   <header>
     <div class="brand-group">
-      <img src="data:image/png;base64,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" alt="ADYPU Logo" class="brand-logo">
+      <img src="logo-soe.png" alt="School of Engineering" class="brand-logo" onerror="this.style.display='none'">
       <div class="brand-text">
-        <h1>NGOS Assignment 1</h1>
-        <p>Ajeenkya DY Patil University • School of Engineering • MCA FY</p>
+        <h1>NGOS Assignment</h1>
+        <p>Ajeenkya DY Patil University • Next Generation Operating Systems</p>
       </div>
     </div>
+
     <div class="header-actions">
-      <button class="theme-toggle" id="themeBtn">
-        <span id="themeIcon">☀️</span> <span id="themeText">Light Mode</span>
+      <button class="theme-toggle" id="themeBtn" title="Toggle Light/Dark Theme">
+        <span id="themeIcon">☀️</span>
+        <span id="themeText">Light Mode</span>
       </button>
-      <a href="MCA_NGOS_PRN_Assignment.pdf" class="btn-download" target="_blank">
-        <svg width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/><path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.143.244-.427.721-.86 1.395-1.258.47-.278 1.015-.525 1.62-.733.243-.728.455-1.503.626-2.31a21.6 21.6 0 0 0 .347-2.227c-.015-.24-.002-.45.045-.634.07-.275.215-.465.419-.533.248-.083.504.025.683.272.2.278.261.64.195 1.056-.098.618-.4 1.394-.852 2.215.176.435.37.873.578 1.309.439.923.94 1.776 1.488 2.533.274.378.57.702.88 1.002.327.316.634.542.92.68.272.13.51.157.712.083.21-.077.34-.247.382-.486.046-.264-.02-.593-.197-.963a4.7 4.7 0 0 0-.81-1.127l.708-.707c.365.365.65.772.846 1.205.275.606.347 1.18.2 1.67-.144.478-.475.823-.935.96-.39.117-.83.076-1.278-.124-.423-.19-.854-.49-1.29-.884-.33-.3-.66-.644-.97-1.026a26.4 26.4 0 0 1-1.42-2.378 19.3 19.3 0 0 0-2.308.825c-.754.34-1.39.736-1.874 1.173-.42.38-.696.792-.79 1.196-.086.368-.01.716.216 1.003.22.281.564.444.974.463l-.11.995z"/></svg>
-        Download PDF
-      </a>
+      <a href="#cover" class="btn-action">Profile</a>
+      <a href="#thankyou" class="btn-action btn-download">3D Finish</a>
     </div>
   </header>
 
-  <div class="app-layout">
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-      <div class="nav-header">Assignment Index</div>
-      <ul class="nav-links">
-        <li><a href="#cover">Academic Profile</a></li>
-        <li><a href="#task1">Task 1: CPU Scheduling</a></li>
-        <li><a href="#task2">Task 2: Multithreading</a></li>
-        <li><a href="#sec-a">Section A: OS Fundamentals</a></li>
-        <li><a href="#sec-b">Section B: Linux Commands</a></li>
-        <li><a href="#sec-c">Section C: Practical Tasks</a></li>
-        <li><a href="#sec-d">Section D: Analytical Scenarios</a></li>
-      </ul>
-    </aside>
+  <!-- ========================================================================= -->
+  <!-- IMPROVED HORIZONTAL NAVIGATION BAR (PURE TEXT ONLY - NO ICONS) -->
+  <!-- ========================================================================= -->
+  <nav class="horizontal-nav" id="topNav">
+    <div class="nav-container">
+      <a href="#cover" class="nav-item active">Profile</a>
+      <a href="#task1" class="nav-item">Task 1: CPU Scheduling</a>
+      <a href="#task2" class="nav-item">Task 2: Multithreading</a>
+      <a href="#sec-a" class="nav-item">Section A: OS Fundamentals</a>
+      <a href="#sec-b" class="nav-item">Section B: Linux Commands</a>
+      <a href="#sec-c" class="nav-item">Section C: Practical Tasks</a>
+      <a href="#sec-d" class="nav-item">Section D: Analytical Scenarios</a>
+      <a href="#thankyou" class="nav-item">Thank You</a>
+    </div>
+  </nav>
 
-    <!-- Main Content -->
-    <main class="content">
+  <!-- Main Content Layout (Full Width Centered) -->
+  <main class="content-full">
 
-      <!-- Cover Profile -->
-      <section class="cover-card" id="cover">
-        <div class="cover-badges">
-          <span class="badge badge-teal">Subject: NGOS</span>
-          <span class="badge badge-amber">Semester I • 2026 – 2027</span>
+    <!-- ========================================================================= -->
+    <!-- FULL PAGE COVER HERO (Adjusted Content & Spacing) -->
+    <!-- ========================================================================= -->
+    <section class="cover-card-hero" id="cover">
+      <div class="cover-badges">
+        <span class="badge badge-primary">MCA (FY) - AIDS</span>
+        <span class="badge badge-teal">Next Generation Operating Systems</span>
+      </div>
+      <h1 class="cover-title">Next Generation Operating Systems</h1>
+      <p class="cover-subtitle">Assignment — CPU Scheduling, Multithreading, Linux Command Shell &amp; Deadlock Analysis</p>
+
+      <div class="profile-grid-hero">
+        <div class="profile-item">
+          <span class="profile-label">Student Name</span>
+          <span class="profile-val">Makwana Tusharbhai Shantibhai</span>
         </div>
-        <h2 class="cover-title">Next Generation Operating Systems</h2>
-        <p class="cover-subtitle">Assignment 1 — CPU Scheduling, Concurrency, Linux File Systems & Process Management</p>
-
-        <div class="profile-grid">
-          <div class="profile-item">
-            <span class="profile-label">Student Name</span>
-            <span class="profile-val">Makwana Tusharbhai Shantibhai</span>
-          </div>
-          <div class="profile-item">
-            <span class="profile-label">URN Number</span>
-            <span class="profile-val">E26M02F2221</span>
-          </div>
-          <div class="profile-item">
-            <span class="profile-label">Program & Class</span>
-            <span class="profile-val">MCA(FY) - AIDS</span>
-          </div>
-          <div class="profile-item">
-            <span class="profile-label">Faculty In-Charge</span>
-            <span class="profile-val">Indu Kumari</span>
-          </div>
+        <div class="profile-item">
+          <span class="profile-label">URN Number</span>
+          <span class="profile-val">E26M02F2221</span>
         </div>
-      </section>
+        <div class="profile-item">
+          <span class="profile-label">Program &amp; Class</span>
+          <span class="profile-val">MCA(FY) - AIDS</span>
+        </div>
+        <div class="profile-item">
+          <span class="profile-label">Faculty In-Charge</span>
+          <span class="profile-val">Indu Kumari</span>
+        </div>
+        <div class="profile-item">
+          <span class="profile-label">Institution</span>
+          <span class="profile-val">School of Engineering, ADYPU Pune</span>
+        </div>
+      </div>
 
-      <!-- Task 1: CPU Scheduling Algorithms -->
-      <section class="section-card" id="task1">
-        <div class="section-header">
+      <div class="hero-cta">
+        <a href="#task1" class="hero-btn">Start Reading Assignment ↓</a>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- Task 1: CPU Scheduling Algorithms -->
+    <!-- (ONLY Question Diagram/Table + Video Player. Any other diagram/text removed) -->
+    <!-- ========================================================================= -->
+    <section class="section-card" id="task1">
+      <div class="section-header">
+        <div class="section-header-left">
           <div class="section-icon">1</div>
           <h2 class="section-title">Task 1: CPU Scheduling Algorithms</h2>
         </div>
+        <span class="section-pill">Question Specification &amp; Video</span>
+      </div>
 
+      <!-- Problem Specification / Question Diagram Table -->
+      <div class="qa-block" style="margin-bottom: 16px;">
+        <div class="qa-question"><span class="q-badge">Problem</span> Given Processes &amp; Scheduling Parameters</div>
         <p style="font-size: 0.92rem; color: var(--tx-muted); margin-bottom: 12px;">
-          Given 4 processes with Arrival Time (AT), Burst Time (BT), and Priority ratings. Priority Rule: <strong>Lower integer = Higher priority</strong> (P2 > P4 > P1 > P3).
+          Given 4 processes with Arrival Time (AT), Burst Time (BT), and Priority ratings. Priority Rule: <strong>Lower integer = Higher priority</strong> (P2 &gt; P4 &gt; P1 &gt; P3).
         </p>
 
-        <!-- Given Process Table -->
         <div class="table-container">
           <table class="data-table">
             <thead>
@@ -656,408 +125,358 @@
                 <th>Process</th>
                 <th>Arrival Time (AT)</th>
                 <th>Burst Time (BT)</th>
-                <th>Priority</th>
+                <th>Priority Ranking</th>
+                <th>Execution Priority Status</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td><strong>P1</strong></td><td>0 ms</td><td>8 ms</td><td>3</td></tr>
-              <tr><td><strong>P2</strong></td><td>1 ms</td><td>4 ms</td><td>1 <span style="color:var(--teal); font-weight:700;">(Highest)</span></td></tr>
-              <tr><td><strong>P3</strong></td><td>2 ms</td><td>9 ms</td><td>4 <span style="color:var(--red); font-weight:700;">(Lowest)</span></td></tr>
-              <tr><td><strong>P4</strong></td><td>3 ms</td><td>5 ms</td><td>2</td></tr>
+              <tr><td><strong>P1</strong></td><td>0 ms</td><td>8 ms</td><td>3</td><td>Priority 3 (Medium)</td></tr>
+              <tr><td><strong>P2</strong></td><td>1 ms</td><td>4 ms</td><td>1</td><td><strong style="color:var(--teal);">Priority 1 (Highest)</strong></td></tr>
+              <tr><td><strong>P3</strong></td><td>2 ms</td><td>9 ms</td><td>4</td><td><strong style="color:var(--red);">Priority 4 (Lowest)</strong></td></tr>
+              <tr><td><strong>P4</strong></td><td>3 ms</td><td>5 ms</td><td>2</td><td>Priority 2 (High)</td></tr>
             </tbody>
           </table>
         </div>
+      </div>
 
-        <!-- A: FCFS -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">A</span> First Come, First Served (FCFS)</div>
-          <p style="font-size: 0.88rem; color: var(--tx-muted);">Processes are dispatched strictly according to arrival order: P1 &rarr; P2 &rarr; P3 &rarr; P4.</p>
-          
-          <div class="gantt-chart">
-            <div class="gantt-block gantt-p1" style="flex: 8;">P1<span class="gantt-time">0 &ndash; 8</span></div>
-            <div class="gantt-block gantt-p2" style="flex: 4;">P2<span class="gantt-time">8 &ndash; 12</span></div>
-            <div class="gantt-block gantt-p3" style="flex: 9;">P3<span class="gantt-time">12 &ndash; 21</span></div>
-            <div class="gantt-block gantt-p4" style="flex: 5;">P4<span class="gantt-time">21 &ndash; 26</span></div>
+      <!-- Video Player (task_1.mp4, Sound OFF, Custom Play & Stop Controls) -->
+      <div class="video-showcase">
+        <div class="video-container">
+          <video id="videoTask1" src="photos/task_1.mp4" muted playsinline loop preload="metadata" class="styled-video"></video>
+        </div>
+        <div class="video-controls">
+          <div class="video-btn-group">
+            <button class="v-btn" id="t1PlayBtn">▶ Play</button>
+            <button class="v-btn" id="t1StopBtn">⏹ Stop</button>
+            <button class="v-btn" id="t1RestartBtn">↺ Restart</button>
+            <button class="v-btn" id="t1MuteBtn">🔇 Sound Off</button>
           </div>
-
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr><th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT (CT - AT)</th><th>WT (TAT - BT)</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>P1</td><td>0</td><td>8</td><td>8</td><td>8 ms</td><td>0 ms</td></tr>
-                <tr><td>P2</td><td>1</td><td>4</td><td>12</td><td>11 ms</td><td>7 ms</td></tr>
-                <tr><td>P3</td><td>2</td><td>9</td><td>21</td><td>19 ms</td><td>10 ms</td></tr>
-                <tr><td>P4</td><td>3</td><td>5</td><td>26</td><td>23 ms</td><td>18 ms</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="calc-banner">
-            <div><strong>Average Turnaround Time (TAT):</strong> (8 + 11 + 19 + 23) / 4 = <strong>15.25 ms</strong></div>
-            <div><strong>Average Waiting Time (WT):</strong> (0 + 7 + 10 + 18) / 4 = <strong>8.75 ms</strong></div>
+          <div class="v-timeline-wrapper">
+            <input type="range" class="v-slider" id="t1Slider" min="0" max="100" value="0">
+            <span class="v-time" id="t1Time">0:00 / 0:00</span>
           </div>
         </div>
+      </div>
+    </section>
 
-        <!-- B: SJF Non-Preemptive -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">B</span> Shortest Job First (SJF &mdash; Non-Preemptive)</div>
-          <p style="font-size: 0.88rem; color: var(--tx-muted);">At t=0 only P1 is ready (0-8). At t=8, ready queue has P2(4) &lt; P4(5) &lt; P3(9). Execution order: P1 &rarr; P2 &rarr; P4 &rarr; P3.</p>
-
-          <div class="gantt-chart">
-            <div class="gantt-block gantt-p1" style="flex: 8;">P1<span class="gantt-time">0 &ndash; 8</span></div>
-            <div class="gantt-block gantt-p2" style="flex: 4;">P2<span class="gantt-time">8 &ndash; 12</span></div>
-            <div class="gantt-block gantt-p4" style="flex: 5;">P4<span class="gantt-time">12 &ndash; 17</span></div>
-            <div class="gantt-block gantt-p3" style="flex: 9;">P3<span class="gantt-time">17 &ndash; 26</span></div>
-          </div>
-
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr><th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT</th><th>WT</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>P1</td><td>0</td><td>8</td><td>8</td><td>8 ms</td><td>0 ms</td></tr>
-                <tr><td>P2</td><td>1</td><td>4</td><td>12</td><td>11 ms</td><td>7 ms</td></tr>
-                <tr><td>P4</td><td>3</td><td>5</td><td>17</td><td>14 ms</td><td>9 ms</td></tr>
-                <tr><td>P3</td><td>2</td><td>9</td><td>26</td><td>24 ms</td><td>15 ms</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="calc-banner">
-            <div><strong>Average Turnaround Time (TAT):</strong> (8 + 11 + 14 + 24) / 4 = <strong>14.25 ms</strong></div>
-            <div><strong>Average Waiting Time (WT):</strong> (0 + 7 + 9 + 15) / 4 = <strong>7.75 ms</strong></div>
-          </div>
-        </div>
-
-        <!-- C: Priority Preemptive -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">C</span> Priority Scheduling (Preemptive)</div>
-          <p style="font-size: 0.88rem; color: var(--tx-muted);">t=0: P1 runs. t=1: P2(Pri 1) preempts P1, runs 1-5. t=5: P4(Pri 2) runs 5-10. t=10: P1(Pri 3, rem 7) runs 10-17. t=17: P3(Pri 4) runs 17-26.</p>
-
-          <div class="gantt-chart">
-            <div class="gantt-block gantt-p1" style="flex: 1;">P1<span class="gantt-time">0&ndash;1</span></div>
-            <div class="gantt-block gantt-p2" style="flex: 4;">P2<span class="gantt-time">1&ndash;5</span></div>
-            <div class="gantt-block gantt-p4" style="flex: 5;">P4<span class="gantt-time">5&ndash;10</span></div>
-            <div class="gantt-block gantt-p1" style="flex: 7;">P1<span class="gantt-time">10&ndash;17</span></div>
-            <div class="gantt-block gantt-p3" style="flex: 9;">P3<span class="gantt-time">17&ndash;26</span></div>
-          </div>
-
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr><th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT</th><th>WT</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>P1</td><td>0</td><td>8</td><td>17</td><td>17 ms</td><td>9 ms</td></tr>
-                <tr><td>P2</td><td>1</td><td>4</td><td>5</td><td>4 ms</td><td>0 ms</td></tr>
-                <tr><td>P4</td><td>3</td><td>5</td><td>10</td><td>7 ms</td><td>2 ms</td></tr>
-                <tr><td>P3</td><td>2</td><td>9</td><td>26</td><td>24 ms</td><td>15 ms</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="calc-banner">
-            <div><strong>Average Turnaround Time (TAT):</strong> (17 + 4 + 7 + 24) / 4 = <strong>13.00 ms</strong> (Optimal)</div>
-            <div><strong>Average Waiting Time (WT):</strong> (9 + 0 + 2 + 15) / 4 = <strong>6.50 ms</strong> (Optimal)</div>
-          </div>
-        </div>
-
-        <!-- D: Round Robin -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">D</span> Round Robin Scheduling (Time Quantum = 3 ms)</div>
-          <p style="font-size: 0.88rem; color: var(--tx-muted);">Queue Trace: P1(0-3) &rarr; P2(3-6) &rarr; P3(6-9) &rarr; P4(9-12) &rarr; P1(12-15) &rarr; P2(15-16, done) &rarr; P3(16-19) &rarr; P4(19-21, done) &rarr; P1(21-23, done) &rarr; P3(23-26, done).</p>
-
-          <div class="gantt-chart">
-            <div class="gantt-block gantt-p1" style="flex: 3;">P1<span class="gantt-time">0-3</span></div>
-            <div class="gantt-block gantt-p2" style="flex: 3;">P2<span class="gantt-time">3-6</span></div>
-            <div class="gantt-block gantt-p3" style="flex: 3;">P3<span class="gantt-time">6-9</span></div>
-            <div class="gantt-block gantt-p4" style="flex: 3;">P4<span class="gantt-time">9-12</span></div>
-            <div class="gantt-block gantt-p1" style="flex: 3;">P1<span class="gantt-time">12-15</span></div>
-            <div class="gantt-block gantt-p2" style="flex: 1;">P2<span class="gantt-time">15-16</span></div>
-            <div class="gantt-block gantt-p3" style="flex: 3;">P3<span class="gantt-time">16-19</span></div>
-            <div class="gantt-block gantt-p4" style="flex: 2;">P4<span class="gantt-time">19-21</span></div>
-            <div class="gantt-block gantt-p1" style="flex: 2;">P1<span class="gantt-time">21-23</span></div>
-            <div class="gantt-block gantt-p3" style="flex: 3;">P3<span class="gantt-time">23-26</span></div>
-          </div>
-
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr><th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT</th><th>WT</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>P1</td><td>0</td><td>8</td><td>23</td><td>23 ms</td><td>15 ms</td></tr>
-                <tr><td>P2</td><td>1</td><td>4</td><td>16</td><td>15 ms</td><td>11 ms</td></tr>
-                <tr><td>P3</td><td>2</td><td>9</td><td>26</td><td>24 ms</td><td>15 ms</td></tr>
-                <tr><td>P4</td><td>3</td><td>5</td><td>21</td><td>18 ms</td><td>13 ms</td></tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="calc-banner">
-            <div><strong>Average Turnaround Time (TAT):</strong> (23 + 15 + 24 + 18) / 4 = <strong>20.00 ms</strong></div>
-            <div><strong>Average Waiting Time (WT):</strong> (15 + 11 + 15 + 13) / 4 = <strong>13.50 ms</strong></div>
-          </div>
-        </div>
-
-        <!-- Comparative Summary -->
-        <div class="table-container" style="margin-top: 20px;">
-          <table class="data-table">
-            <thead>
-              <tr><th>Algorithm</th><th>Average TAT</th><th>Average WT</th><th>Best Suited For</th></tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>FCFS</strong></td><td>15.25 ms</td><td>8.75 ms</td><td>Simple batch workloads; minimal scheduling overhead</td></tr>
-              <tr><td><strong>SJF (Non-Preemptive)</strong></td><td>14.25 ms</td><td>7.75 ms</td><td>Minimizing average wait when execution times are known</td></tr>
-              <tr><td><strong>Priority (Preemptive)</strong></td><td><strong style="color:var(--teal);">13.00 ms</strong></td><td><strong style="color:var(--teal);">6.50 ms</strong></td><td>Time-critical tasks requiring immediate CPU dispatch</td></tr>
-              <tr><td><strong>Round Robin (q=3ms)</strong></td><td>20.00 ms</td><td>13.50 ms</td><td>Interactive time-sharing systems; prevents starvation</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Task 2: Multithreading Implementation -->
-      <section class="section-card" id="task2">
-        <div class="section-header">
+    <!-- ========================================================================= -->
+    <!-- Task 2: Multithreading Implementation -->
+    <!-- (task_2.png Diagram + Easy Python Code + Point-to-Point Details + Run on Site) -->
+    <!-- ========================================================================= -->
+    <section class="section-card" id="task2">
+      <div class="section-header">
+        <div class="section-header-left">
           <div class="section-icon">2</div>
           <h2 class="section-title">Task 2: Multithreading Implementation</h2>
         </div>
+        <span class="section-pill">Python Code &amp; Execution Output</span>
+      </div>
 
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Task</span> Three Concurrent Threads in Python</div>
-          <p style="font-size: 0.9rem; color: var(--tx-muted); margin-bottom: 12px;">
-            Implement and execute three threads concurrently within a single process address space:
-          </p>
-          <ul class="point-list">
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Thread 1:</strong> Prints numbers from 1 to 10</span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Thread 2:</strong> Prints alphabets from A to J</span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Thread 3:</strong> Prints squares of numbers from 1 to 10 (1, 4, 9, ..., 100)</span></li>
-          </ul>
+      <!-- Diagram Showcase -->
+      <div class="diagram-showcase">
+        <img src="photos/task_2.png" alt="Multithreaded Execution Flow: Task 2" class="diagram-img">
+        <div class="diagram-caption">
+          <span><strong>Figure:</strong> Multi-threaded execution model showing 3 concurrent threads in a shared process space.</span>
+          <span class="badge badge-teal">Task 2 Architecture</span>
+        </div>
+      </div>
 
-          <div class="terminal-box" style="margin-top: 16px;">
-            <div class="terminal-header">
-              <span class="term-dot red"></span><span class="term-dot yellow"></span><span class="term-dot green"></span>
-              <span class="term-title">multithread_demo.py</span>
-            </div>
-            <div class="terminal-body"><span class="prompt">import</span> threading
-<span class="prompt">import</span> time
-<span class="prompt">import</span> sys
+      <!-- Point-to-Point Details -->
+      <div class="qa-block">
+        <div class="qa-question"><span class="q-badge">Task</span> Three Concurrent Threads in Python (Point-to-Point Summary)</div>
+        <ul class="point-list">
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Thread 1 (Numbers):</strong> Prints numbers <code>1</code> to <code>10</code> sequentially.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Thread 2 (Alphabets):</strong> Prints letters <code>'A'</code> through <code>'J'</code> sequentially.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Thread 3 (Squares):</strong> Prints squares of numbers from 1 to 10 ($1^2=1, 2^2=4, \dots, 10^2=100$).</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Address Space:</strong> All 3 threads share the single process memory space and stdout terminal buffer.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Synchronization:</strong> <code>start()</code> launches threads; <code>join()</code> awaits completion before main process terminates.</span></li>
+        </ul>
+      </div>
 
-<span class="prompt">def</span> print_numbers():
-    <span class="prompt">for</span> i <span class="prompt">in</span> range(1, 11):
-        sys.stdout.write(f"[Thread-1] Number:   {i}\n")
-        sys.stdout.flush()
-        time.sleep(0.01)
-
-<span class="prompt">def</span> print_alphabets():
-    <span class="prompt">for</span> ch <span class="prompt">in</span> "ABCDEFGHIJ":
-        sys.stdout.write(f"[Thread-2] Alphabet: {ch}\n")
-        sys.stdout.flush()
-        time.sleep(0.01)
-
-<span class="prompt">def</span> print_squares():
-    <span class="prompt">for</span> i <span class="prompt">in</span> range(1, 11):
-        sys.stdout.write(f"[Thread-3] Square:   {i}² = {i*i}\n")
-        sys.stdout.flush()
-        time.sleep(0.01)
-
-<span class="output"># Initialize 3 concurrent worker threads</span>
-t1 = threading.Thread(target=print_numbers, name="T1")
-t2 = threading.Thread(target=print_alphabets, name="T2")
-t3 = threading.Thread(target=print_squares, name="T3")
-
-<span class="output"># Launch threads concurrently</span>
-t1.start(); t2.start(); t3.start()
-
-<span class="output"># Await thread completion</span>
-t1.join(); t2.join(); t3.join()
-print("[Main] All concurrent threads executed successfully.")</div>
+      <!-- Code & Live Output Presented Together on Site -->
+      <div class="code-and-output-grid">
+        <!-- Python Code Box (Easy, Clean Format) -->
+        <div class="code-box">
+          <div class="code-box-header">
+            <span>multithread_demo.py (Easy Python Format)</span>
+            <button class="btn-copy" onclick="copyCode('pyCodeText', this)">Copy Code</button>
           </div>
+          <div class="code-box-body" id="pyCodeText"><span style="color:var(--cyan);">import</span> threading
+<span style="color:var(--cyan);">import</span> time
 
-          <div class="terminal-box">
-            <div class="terminal-header">
+<span style="color:var(--purple);">def</span> <span style="color:var(--amber);">print_numbers</span>():
+    <span style="color:var(--cyan);">for</span> i <span style="color:var(--cyan);">in</span> range(1, 11):
+        print(f<span style="color:var(--green);">"[Thread-1] Number:   {i}"</span>)
+        time.sleep(0.01)
+
+<span style="color:var(--purple);">def</span> <span style="color:var(--amber);">print_alphabets</span>():
+    <span style="color:var(--cyan);">for</span> ch <span style="color:var(--cyan);">in</span> <span style="color:var(--green);">"ABCDEFGHIJ"</span>:
+        print(f<span style="color:var(--green);">"[Thread-2] Alphabet: {ch}"</span>)
+        time.sleep(0.01)
+
+<span style="color:var(--purple);">def</span> <span style="color:var(--amber);">print_squares</span>():
+    <span style="color:var(--cyan);">for</span> i <span style="color:var(--cyan);">in</span> range(1, 11):
+        print(f<span style="color:var(--green);">"[Thread-3] Square:   {i}² = {i*i}"</span>)
+        time.sleep(0.01)
+
+<span style="color:var(--tx-muted);"># 1. Create 3 concurrent worker threads</span>
+t1 = threading.Thread(target=print_numbers)
+t2 = threading.Thread(target=print_alphabets)
+t3 = threading.Thread(target=print_squares)
+
+<span style="color:var(--tx-muted);"># 2. Launch all threads simultaneously</span>
+t1.start()
+t2.start()
+t3.start()
+
+<span style="color:var(--tx-muted);"># 3. Main awaits all thread completion</span>
+t1.join()
+t2.join()
+t3.join()
+
+print(<span style="color:var(--green);">"[Main] All concurrent threads executed successfully."</span>)</div>
+        </div>
+
+        <!-- Terminal Output Runner (Animated on Site) -->
+        <div class="terminal-box">
+          <div class="terminal-header">
+            <div class="term-dots-group">
               <span class="term-dot red"></span><span class="term-dot yellow"></span><span class="term-dot green"></span>
               <span class="term-title">Terminal Execution Output</span>
             </div>
-            <div class="terminal-body"><span class="prompt">$</span> python multithread_demo.py
-[Thread-1] Number:   1
-[Thread-2] Alphabet: A
-[Thread-3] Square:   1² = 1
-[Thread-1] Number:   2
-[Thread-2] Alphabet: B
-[Thread-3] Square:   2² = 4
-...
-[Thread-1] Number:   10
-[Thread-2] Alphabet: J
-[Thread-3] Square:   10² = 100
-[Main] All concurrent threads executed successfully.</div>
+            <span class="term-status" id="t2Status">Ready</span>
+          </div>
+          <div class="terminal-body" id="t2TermBody"><span class="prompt">$</span> python multithread_demo.py
+<span class="output"># Click "▶ Run Code" below to execute and see animated thread interleaving.</span></div>
+          <div class="terminal-actions">
+            <button class="btn-run" id="t2RunBtn">▶ Run Code</button>
+            <span style="font-size:0.75rem; color:var(--tx-muted); font-family:var(--font-mono);">Live Thread Simulation</span>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Section A: OS Fundamentals -->
-      <section class="section-card" id="sec-a">
-        <div class="section-header">
+    <!-- ========================================================================= -->
+    <!-- Section A: OS Fundamentals (3D Three.js + GSAP ScrollTrigger Reveal) -->
+    <!-- ========================================================================= -->
+    <section class="section-card" id="sec-a">
+      <div class="section-header">
+        <div class="section-header-left">
           <div class="section-icon">A</div>
           <h2 class="section-title">Section A: Operating System Fundamentals</h2>
         </div>
+        <span class="section-pill">3D Visualizer &amp; Scroll-Revealed Concepts</span>
+      </div>
 
-        <!-- Q1 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q1</span> What is an Operating System? Explain any four functions.</div>
-          <p style="font-size: 0.92rem; margin-bottom: 8px;">
-            <strong>Definition:</strong> An Operating System (OS) is system software that acts as an intermediary between computer hardware and user software applications, managing resources and providing runtime services.
-          </p>
-          <ul class="point-list">
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>1. Process Management:</strong> Creates, schedules, synchronizes, and terminates processes on the CPU.</span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>2. Memory Management:</strong> Allocates RAM addresses and coordinates virtual memory demand paging.</span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>3. File Management:</strong> Organizes files into directory trees, managing read/write permissions and storage inodes.</span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>4. Device Management:</strong> Controls peripheral I/O devices via device drivers and coordinates interrupts/buffers.</span></li>
-          </ul>
+      <!-- 3D OS Architecture Visualizer Canvas (Three.js) -->
+      <div class="three-canvas-container" id="os3dContainer">
+        <div class="canvas-overlay-badge">Three.js 3D OS Kernel &amp; Rings Architecture</div>
+        <div class="canvas-hint">Drag / Move Mouse to Orbit 3D OS Rings</div>
+      </div>
+
+      <p style="font-size: 0.88rem; color: var(--tx-muted); margin-bottom: 16px;">
+        <em>Point-to-point conceptual summary. Scroll slowly to reveal each question module smoothly:</em>
+      </p>
+
+      <!-- Q1 -->
+      <div class="qa-block gsap-reveal">
+        <div class="qa-question"><span class="q-badge">Q1</span> What is an Operating System? Explain any four functions.</div>
+        <ul class="point-list">
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Definition:</strong> System software acting as an intermediary between computer hardware and user application software.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>1. Process Management:</strong> Allocates CPU time slices, handles thread creation, dispatching, synchronization, and termination.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>2. Memory Management:</strong> Allocates/deallocates RAM addresses, tracks memory map tables, and coordinates virtual memory demand paging.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>3. File System Management:</strong> Manages directories, files, access inodes, permissions (read/write/execute), and block disk allocation.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>4. Device (I/O) Management:</strong> Interfaces with hardware peripherals via device drivers, coordinating interrupts, buffers, and DMA channels.</span></li>
+        </ul>
+      </div>
+
+      <!-- Q2 -->
+      <div class="qa-block gsap-reveal">
+        <div class="qa-question"><span class="q-badge">Q2</span> Differentiate between Main Memory and Virtual Memory.</div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead><tr><th>Parameter</th><th>Main Memory (RAM)</th><th>Virtual Memory</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Nature</strong></td><td>Physical semiconductor hardware on motherboard</td><td>Logical memory management abstraction using disk</td></tr>
+              <tr><td><strong>Access Speed</strong></td><td>Nanosecond ultra-fast direct CPU bus access</td><td>Slower (incurs disk I/O latency upon page faults)</td></tr>
+              <tr><td><strong>Capacity</strong></td><td>Strictly bounded by physical RAM modules</td><td>Extends address space beyond physical limit via disk</td></tr>
+              <tr><td><strong>Management</strong></td><td>Directly indexed by CPU and OS kernel</td><td>Managed jointly by OS kernel &amp; CPU Memory Management Unit (MMU)</td></tr>
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        <!-- Q2 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q2</span> Differentiate between Main Memory and Virtual Memory.</div>
-          <div class="table-container">
-            <table class="data-table">
-              <thead><tr><th>Parameter</th><th>Main Memory (RAM)</th><th>Virtual Memory</th></tr></thead>
-              <tbody>
-                <tr><td><strong>Nature</strong></td><td>Physical semiconductor memory chips on motherboard</td><td>Logical memory management abstraction using disk</td></tr>
-                <tr><td><strong>Access Speed</strong></td><td>Extremely fast (nanosecond access times)</td><td>Slower (involves disk/SSD I/O on page faults)</td></tr>
-                <tr><td><strong>Capacity</strong></td><td>Strictly limited by installed physical RAM</td><td>Extends address space beyond physical RAM limit</td></tr>
-                <tr><td><strong>Management</strong></td><td>Directly accessed by CPU and OS kernel</td><td>Managed jointly by OS kernel and CPU MMU hardware</td></tr>
-              </tbody>
-            </table>
-          </div>
+      <!-- Q3 -->
+      <div class="qa-block gsap-reveal">
+        <div class="qa-question"><span class="q-badge">Q3</span> What is the difference between a Process and a Program?</div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead><tr><th>Parameter</th><th>Program</th><th>Process</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Definition</strong></td><td>Passive set of instructions stored on disk</td><td>Active instance of a program in execution</td></tr>
+              <tr><td><strong>Resource Cost</strong></td><td>Consumes secondary storage space only</td><td>Consumes CPU cycles, registers, stack, heap &amp; RAM</td></tr>
+              <tr><td><strong>Execution State</strong></td><td>Static binary file (no runtime state)</td><td>Dynamic states: Ready, Running, Waiting, Terminated</td></tr>
+              <tr><td><strong>Multiplicity</strong></td><td>Single persistent executable file</td><td>One program can spawn multiple distinct concurrent processes</td></tr>
+            </tbody>
+          </table>
         </div>
+      </div>
 
-        <!-- Q3 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q3</span> What is the difference between a Process and a Program?</div>
-          <div class="table-container">
-            <table class="data-table">
-              <thead><tr><th>Parameter</th><th>Program</th><th>Process</th></tr></thead>
-              <tbody>
-                <tr><td><strong>Definition</strong></td><td>Passive set of instructions stored on disk</td><td>Active instance of a program in execution</td></tr>
-                <tr><td><strong>Resource Usage</strong></td><td>Requires only secondary disk storage space</td><td>Consumes CPU cycles, registers, stack, heap & RAM</td></tr>
-                <tr><td><strong>State</strong></td><td>Has no execution state (static binary file)</td><td>Has dynamic states: Ready, Running, Waiting, Terminated</td></tr>
-                <tr><td><strong>Multiplicity</strong></td><td>Single file stored in filesystem</td><td>One program can spawn multiple distinct processes</td></tr>
-              </tbody>
-            </table>
-          </div>
+      <!-- Q4 -->
+      <div class="qa-block gsap-reveal">
+        <div class="qa-question"><span class="q-badge">Q4</span> What is Deadlock? List its four necessary conditions.</div>
+        <p style="font-size: 0.91rem; margin-bottom: 8px;">
+          <strong>Definition:</strong> A permanent stalled state where two or more processes wait indefinitely for resources held by each other.
+        </p>
+        <ul class="point-list">
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>1. Mutual Exclusion:</strong> At least one resource is held in non-shareable mode (only one process at a time).</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>2. Hold and Wait:</strong> A process holds resources while requesting additional resources currently held by others.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>3. No Preemption:</strong> Resources cannot be forcibly seized; only released voluntarily upon task completion.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>4. Circular Wait:</strong> A closed chain of processes exists such that each process waits for a resource held by the next.</span></li>
+        </ul>
+      </div>
+
+      <!-- Q5 -->
+      <div class="qa-block gsap-reveal">
+        <div class="qa-question"><span class="q-badge">Q5</span> Differentiate between Paging and Swapping.</div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead><tr><th>Parameter</th><th>Paging</th><th>Swapping</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Unit of Transfer</strong></td><td>Fixed-size memory blocks called Pages (typically 4 KB)</td><td>Entire process memory image (all pages &amp; data)</td></tr>
+              <tr><td><strong>Fragmentation</strong></td><td>Completely eliminates external memory fragmentation</td><td>Can cause external fragmentation in swap space</td></tr>
+              <tr><td><strong>Overhead</strong></td><td>Fine-grained, low-latency transfer on page fault</td><td>Coarse-grained, high disk read/write bandwidth cost</td></tr>
+              <tr><td><strong>Primary Goal</strong></td><td>Provides non-contiguous virtual address translation</td><td>Frees large blocks of physical RAM under memory pressure</td></tr>
+            </tbody>
+          </table>
         </div>
+      </div>
+    </section>
 
-        <!-- Q4 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q4</span> What is Deadlock? List its four necessary conditions.</div>
-          <p style="font-size: 0.92rem; margin-bottom: 8px;">
-            <strong>Definition:</strong> Deadlock is a permanent stalled state where two or more processes wait indefinitely for resources held by each other.
-          </p>
-          <ul class="point-list">
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>1. Mutual Exclusion:</strong> At least one resource is held in non-shareable mode (one process at a time).</span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>2. Hold and Wait:</strong> A process holds resources while requesting additional resources held by other processes.</span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>3. No Preemption:</strong> Resources cannot be forcibly taken away; they are only released voluntarily.</span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>4. Circular Wait:</strong> A closed cycle of processes exists where each process waits for a resource held by the next.</span></li>
-          </ul>
-        </div>
-
-        <!-- Q5 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q5</span> Differentiate between Paging and Swapping.</div>
-          <div class="table-container">
-            <table class="data-table">
-              <thead><tr><th>Parameter</th><th>Paging</th><th>Swapping</th></tr></thead>
-              <tbody>
-                <tr><td><strong>Unit of Transfer</strong></td><td>Fixed-size blocks called Pages (typically 4 KB)</td><td>Entire process memory image</td></tr>
-                <tr><td><strong>Fragmentation</strong></td><td>Eliminates external fragmentation completely</td><td>Can lead to external fragmentation in RAM</td></tr>
-                <tr><td><strong>Overhead</strong></td><td>Fine-grained, low-overhead transfer on page faults</td><td>Coarse-grained, high disk I/O overhead</td></tr>
-                <tr><td><strong>Purpose</strong></td><td>Provides virtual memory and non-contiguous mapping</td><td>Frees large blocks of RAM under heavy memory pressure</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section B: Linux Commands -->
-      <section class="section-card" id="sec-b">
-        <div class="section-header">
+    <!-- ========================================================================= -->
+    <!-- Section B: Linux Commands (Code + Run Option + Next Button Switcher) -->
+    <!-- ========================================================================= -->
+    <section class="section-card" id="sec-b">
+      <div class="section-header">
+        <div class="section-header-left">
           <div class="section-icon">B</div>
           <h2 class="section-title">Section B: Linux Commands and File Management</h2>
         </div>
+        <span class="section-pill">Interactive Command Shell Runner</span>
+      </div>
 
-        <!-- Q6 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q6</span> Linux Commands for Listed Operations</div>
-          <div class="table-container">
-            <table class="data-table">
-              <thead><tr><th>Operation Required</th><th>Linux Command</th><th>Syntax & Example</th></tr></thead>
-              <tbody>
-                <tr><td>Display current working directory</td><td><code>pwd</code></td><td><code>$ pwd</code> &rarr; <code>/home/student</code></td></tr>
-                <tr><td>List files and directories</td><td><code>ls</code></td><td><code>$ ls -l</code> &rarr; detailed permissions & dates</td></tr>
-                <tr><td>Create an empty file named student.txt</td><td><code>touch</code></td><td><code>$ touch student.txt</code></td></tr>
-                <tr><td>Create a directory named BCA</td><td><code>mkdir</code></td><td><code>$ mkdir BCA</code></td></tr>
-                <tr><td>Display contents of student.txt</td><td><code>cat</code></td><td><code>$ cat student.txt</code></td></tr>
-              </tbody>
-            </table>
+      <!-- Interactive Code & Live Output Terminal in Same Section -->
+      <div class="code-and-output-grid">
+        <!-- Command Code Box -->
+        <div class="code-box">
+          <div class="code-box-header">
+            <span id="secBCmdHeader">Active Command (1/12)</span>
+            <span id="secBCmdType" style="color:var(--amber);">Core Command</span>
+          </div>
+          <div class="code-box-body" id="secBCodeSnippet"><span style="color:var(--tx-muted);"># Command Syntax &amp; Usage:</span>
+<span class="prompt">$</span> <span class="cmd" id="secBCmdDisplay">pwd</span>
+
+<span style="color:var(--tx-muted);"># Description:</span>
+<span id="secBCmdDesc" style="color:var(--teal);">Prints the current working directory path from root.</span></div>
+          <div class="terminal-actions">
+            <button class="btn-next-cmd" id="secBPrevBtn">◀ Prev</button>
+            <button class="btn-next-cmd" id="secBNextBtn">Next Command ▶</button>
           </div>
         </div>
 
-        <!-- Q7 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q7</span> Explain cd, cp, mv, rm, and wc with Examples</div>
-          <ul class="point-list">
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>cd (Change Directory):</strong> Navigates between directory paths. Example: <code>cd /home/student/documents</code></span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>cp (Copy):</strong> Duplicates files or directories. Example: <code>cp student.txt backup.txt</code></span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>mv (Move / Rename):</strong> Relocates or renames files. Example: <code>mv student.txt details.txt</code></span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>rm (Remove):</strong> Deletes files permanently. Example: <code>rm old.txt</code> (or <code>rm -r folder/</code>)</span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>wc (Word Count):</strong> Counts lines, words, and bytes. Example: <code>wc -l student.txt</code></span></li>
-          </ul>
-        </div>
-
-        <!-- Q8 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q8</span> Difference between find and grep</div>
-          <div class="table-container">
-            <table class="data-table">
-              <thead><tr><th>Feature</th><th>find Command</th><th>grep Command</th></tr></thead>
-              <tbody>
-                <tr><td><strong>Primary Purpose</strong></td><td>Searches filesystem directory trees for files</td><td>Searches inside file contents for text patterns</td></tr>
-                <tr><td><strong>Search Target</strong></td><td>File names, types, sizes, permissions, dates</td><td>Specific words, phrases, or regular expressions</td></tr>
-                <tr><td><strong>Input Scope</strong></td><td>Directory path (e.g. <code>/home/student</code>)</td><td>One or more text files or piped stdin</td></tr>
-                <tr><td><strong>Example Command</strong></td><td><code>find . -type f -name 'capital.txt'</code></td><td><code>grep -n 'Maharashtra' capital.txt</code></td></tr>
-              </tbody>
-            </table>
+        <!-- Terminal Output Runner -->
+        <div class="terminal-box">
+          <div class="terminal-header">
+            <div class="term-dots-group">
+              <span class="term-dot red"></span><span class="term-dot yellow"></span><span class="term-dot green"></span>
+              <span class="term-title" id="secBTermTitle">Terminal Output</span>
+            </div>
+            <span class="term-status" id="secBStatus">Ready</span>
+          </div>
+          <div class="terminal-body" id="secBTermBody"><span class="prompt">student@adypu-linux:~$</span> <span class="cmd" id="secBRunningCmd">pwd</span>
+<span class="output" id="secBOutputDisplay">/home/student</span></div>
+          <div class="terminal-actions">
+            <button class="btn-run" id="secBRunBtn">▶ Run Code</button>
+            <span style="font-size:0.75rem; color:var(--tx-muted); font-family:var(--font-mono);" id="secBRunningStatus">Exit Code 0</span>
           </div>
         </div>
-      </section>
+      </div>
 
-      <!-- Section C: Practical Questions -->
-      <section class="section-card" id="sec-c">
-        <div class="section-header">
+      <!-- Point-to-Point Summary of Questions Q6, Q7, Q8 -->
+      <div class="qa-block">
+        <div class="qa-question"><span class="q-badge">Q6</span> Point-to-Point Summary of Core File Operations</div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead><tr><th>Operation Required</th><th>Linux Command</th><th>Point-to-Point Syntax &amp; Action</th></tr></thead>
+            <tbody>
+              <tr><td>Display current working directory</td><td><code>pwd</code></td><td>Prints absolute path of current working directory</td></tr>
+              <tr><td>List files and directories</td><td><code>ls -l</code></td><td>Displays entries with permissions, size, timestamps</td></tr>
+              <tr><td>Create empty file <code>student.txt</code></td><td><code>touch student.txt</code></td><td>Updates timestamp or generates zero-byte file</td></tr>
+              <tr><td>Create directory <code>BCA</code></td><td><code>mkdir BCA</code></td><td>Allocates new directory inode in current path</td></tr>
+              <tr><td>Display contents of file</td><td><code>cat student.txt</code></td><td>Concatenates and streams file contents to STDOUT</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="qa-block">
+        <div class="qa-question"><span class="q-badge">Q7</span> Explanation of cd, cp, mv, rm, and wc</div>
+        <ul class="point-list">
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>cd (Change Directory):</strong> Modifies active working directory path. Example: <code>cd /home/student/BCA</code></span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>cp (Copy):</strong> Duplicates file or directory contents to target path. Example: <code>cp student.txt backup.txt</code></span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>mv (Move / Rename):</strong> Relocates or renames file without duplicating data blocks. Example: <code>mv student.txt details.txt</code></span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>rm (Remove):</strong> Unlinks file inode from directory tree permanently. Example: <code>rm -f old_temp.txt</code></span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>wc (Word Count):</strong> Tallies newline count (<code>-l</code>), words (<code>-w</code>), and bytes (<code>-c</code>). Example: <code>wc -l student.txt</code></span></li>
+        </ul>
+      </div>
+
+      <div class="qa-block">
+        <div class="qa-question"><span class="q-badge">Q8</span> Difference between find and grep</div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead><tr><th>Feature</th><th>find Command</th><th>grep Command</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Primary Objective</strong></td><td>Searches filesystem directory trees for files</td><td>Searches inside file contents for text patterns</td></tr>
+              <tr><td><strong>Search Criteria</strong></td><td>File names, types, sizes, permissions, mod times</td><td>Regex strings, word patterns, case-insensitive flags</td></tr>
+              <tr><td><strong>Target Scope</strong></td><td>Directory tree root path (e.g., <code>/home/student</code>)</td><td>Individual file stream, files, or stdin pipes</td></tr>
+              <tr><td><strong>Command Example</strong></td><td><code>find . -type f -name "student.txt"</code></td><td><code>grep -n "MCA" student.txt</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- Section C: Linux Practical Questions (Code + Run Option + Animated Output) -->
+    <!-- ========================================================================= -->
+    <section class="section-card" id="sec-c">
+      <div class="section-header">
+        <div class="section-header-left">
           <div class="section-icon">C</div>
           <h2 class="section-title">Section C: Linux Practical Questions</h2>
         </div>
+        <span class="section-pill">Code &amp; Animated Output</span>
+      </div>
 
-        <!-- Q9 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q9</span> Create and Display Student Detail File (student.txt)</div>
-          <p style="font-size: 0.9rem; color: var(--tx-muted); margin-bottom: 8px;">
-            Created using Nano editor (<code>nano student.txt</code>) and verified via terminal commands:
-          </p>
-          <div class="terminal-box">
-            <div class="terminal-header">
-              <span class="term-dot red"></span><span class="term-dot yellow"></span><span class="term-dot green"></span>
-              <span class="term-title">student.txt Verification</span>
+      <!-- Q9: student.txt Code & Output -->
+      <div class="qa-block">
+        <div class="qa-question"><span class="q-badge">Q9</span> Create and Display Student Details File (student.txt)</div>
+        <ul class="point-list" style="margin-bottom: 14px;">
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Nano Authoring:</strong> <code>nano student.txt</code> &rarr; Write record &rarr; <kbd>Ctrl+O</kbd> &rarr; <kbd>Ctrl+X</kbd>.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Display Verification:</strong> Execute <code>cat student.txt</code> to stream profile record to terminal.</span></li>
+        </ul>
+
+        <div class="code-and-output-grid">
+          <!-- Code Presentation -->
+          <div class="code-box">
+            <div class="code-box-header">
+              <span>student.txt Creation Script</span>
+              <button class="btn-copy" onclick="copyCode('q9CodeText', this)">Copy Code</button>
             </div>
-            <div class="terminal-body"><span class="prompt">$</span> pwd
-/home/student
-<span class="prompt">$</span> touch student.txt
-<span class="prompt">$</span> mkdir BCA
-<span class="prompt">$</span> cat student.txt
+            <div class="code-box-body" id="q9CodeText"><span style="color:var(--tx-muted);"># Step 1: Create file in Nano</span>
+$ nano student.txt
+
+<span style="color:var(--tx-muted);"># Step 2: Content written to student.txt</span>
 ==================================================
               STUDENT PROFILE RECORD
 ==================================================
@@ -1067,123 +486,220 @@ Program:      MCA(FY) - AIDS
 Faculty:      Indu Kumari
 College:      Ajeenkya DY Patil University, Pune
 Academic Year: 2026 – 2027
-==================================================</div>
-          </div>
-        </div>
+==================================================
 
-        <!-- Q10 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q10</span> Create State-Capital File Using Vim & Perform Search and Count</div>
-          <p style="font-size: 0.9rem; color: var(--tx-muted); margin-bottom: 8px;">
-            Created <code>capital.txt</code> using Vim (<code>vim capital.txt</code>) containing 10 Indian states and capitals. Verified via terminal commands:
-          </p>
+<span style="color:var(--tx-muted);"># Step 3: Stream and view file</span>
+$ cat student.txt</div>
+          </div>
+
+          <!-- Live Output Presentation -->
           <div class="terminal-box">
             <div class="terminal-header">
-              <span class="term-dot red"></span><span class="term-dot yellow"></span><span class="term-dot green"></span>
-              <span class="term-title">capital.txt Search & Count Operations</span>
+              <div class="term-dots-group">
+                <span class="term-dot red"></span><span class="term-dot yellow"></span><span class="term-dot green"></span>
+                <span class="term-title">Terminal Output: cat student.txt</span>
+              </div>
+              <span class="term-status" id="q9Status">Ready</span>
             </div>
-            <div class="terminal-body"><span class="output"># 1. Locate file in directory tree</span>
-<span class="prompt">$</span> find . -type f -name 'capital.txt'
-./capital.txt
-
-<span class="output"># 2. Search for Maharashtra inside file</span>
-<span class="prompt">$</span> grep 'Maharashtra' capital.txt
-Maharashtra - Mumbai
-
-<span class="output"># 3. Search with matching line numbers (-n)</span>
-<span class="prompt">$</span> grep -n 'Maharashtra' capital.txt
-1:Maharashtra - Mumbai
-
-<span class="output"># 4. Count total lines in file (-l)</span>
-<span class="prompt">$</span> wc -l capital.txt
-10 capital.txt</div>
+            <div class="terminal-body" id="q9TermBody"><span class="prompt">student@adypu-linux:~$</span> <span class="cmd">cat student.txt</span>
+<span class="output"># Click "▶ Run Code" to stream student record in animated style.</span></div>
+            <div class="terminal-actions">
+              <button class="btn-run" id="q9RunBtn">▶ Run Code</button>
+              <span style="font-size:0.75rem; color:var(--tx-muted); font-family:var(--font-mono);">STDOUT Stream</span>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <!-- Section D: Analytical Scenarios -->
-      <section class="section-card" id="sec-d">
-        <div class="section-header">
+      <!-- Q10: capital.txt Code & Output -->
+      <div class="qa-block">
+        <div class="qa-question"><span class="q-badge">Q10</span> Create State-Capital File Using Vim &amp; Perform Search and Count</div>
+        <ul class="point-list" style="margin-bottom: 14px;">
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Vim Workflow:</strong> <code>vim capital.txt</code> &rarr; <kbd>i</kbd> (Insert) &rarr; Type states &rarr; <kbd>Esc</kbd> &rarr; <code>:wq</code>.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Verification Suite:</strong> <code>cat capital.txt</code>, <code>find ~ -name 'capital.txt'</code>, <code>grep -n 'Maharashtra'</code>, <code>wc -l</code>.</span></li>
+        </ul>
+
+        <div class="code-and-output-grid">
+          <!-- Code Presentation -->
+          <div class="code-box">
+            <div class="code-box-header">
+              <span>capital.txt Suite Script</span>
+              <button class="btn-copy" onclick="copyCode('q10CodeText', this)">Copy Code</button>
+            </div>
+            <div class="code-box-body" id="q10CodeText"><span style="color:var(--tx-muted);"># 1. Author 10 states in Vim</span>
+$ vim capital.txt
+
+<span style="color:var(--tx-muted);"># 2. Search file by name in home directory</span>
+$ find ~ -name "capital.txt"
+
+<span style="color:var(--tx-muted);"># 3. Search Maharashtra with line number (-n)</span>
+$ grep -n "Maharashtra" capital.txt
+
+<span style="color:var(--tx-muted);"># 4. Count total lines (-l)</span>
+$ wc -l capital.txt</div>
+          </div>
+
+          <!-- Live Output Presentation -->
+          <div class="terminal-box">
+            <div class="terminal-header">
+              <div class="term-dots-group">
+                <span class="term-dot red"></span><span class="term-dot yellow"></span><span class="term-dot green"></span>
+                <span class="term-title">Terminal Output: Practical Suite</span>
+              </div>
+              <span class="term-status" id="q10Status">Ready</span>
+            </div>
+            <div class="terminal-body" id="q10TermBody"><span class="prompt">student@adypu-linux:~$</span> <span class="cmd">cat capital.txt && grep -n "Maharashtra" capital.txt && wc -l capital.txt</span>
+<span class="output"># Click "▶ Run Code" to execute complete practical sequence on site.</span></div>
+            <div class="terminal-actions">
+              <button class="btn-run" id="q10RunBtn">▶ Run Code</button>
+              <span style="font-size:0.75rem; color:var(--tx-muted); font-family:var(--font-mono);">10 States Verification</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- Section D: Analytical Scenarios (Q11 Video + Q13 Code & Run on Site) -->
+    <!-- ========================================================================= -->
+    <section class="section-card" id="sec-d">
+      <div class="section-header">
+        <div class="section-header-left">
           <div class="section-icon">D</div>
-          <h2 class="section-title">Section D: Analytical & Scenario Questions</h2>
+          <h2 class="section-title">Section D: Analytical &amp; Scenario Questions</h2>
+        </div>
+        <span class="section-pill">Deadlock Video &amp; Diagnostic Suite</span>
+      </div>
+
+      <!-- Q11: Deadlock Video & Point-to-Point Prevention -->
+      <div class="qa-block">
+        <div class="qa-question"><span class="q-badge">Q11</span> Explain How Deadlock May Occur and Two Prevention Methods</div>
+        
+        <!-- Video Player (Sound OFF, Custom Play/Stop buttons) -->
+        <div class="video-showcase">
+          <div class="video-container">
+            <video id="videoQ11" src="photos/section_d_q-11.mp4" muted playsinline loop preload="metadata" class="styled-video"></video>
+          </div>
+          <div class="video-controls">
+            <div class="video-btn-group">
+              <button class="v-btn" id="q11PlayBtn">▶ Play</button>
+              <button class="v-btn" id="q11StopBtn">⏹ Stop</button>
+              <button class="v-btn" id="q11RestartBtn">↺ Restart</button>
+              <button class="v-btn" id="q11MuteBtn">🔇 Sound Off</button>
+            </div>
+            <div class="v-timeline-wrapper">
+              <input type="range" class="v-slider" id="q11Slider" min="0" max="100" value="0">
+              <span class="v-time" id="q11Time">0:00 / 0:00</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Q11 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q11</span> Explain How Deadlock May Occur and Two Prevention Methods</div>
-          <p style="font-size: 0.92rem; margin-bottom: 8px;">
-            <strong>Deadlock Occurrence Scenario:</strong> Suppose Process P1 holds Resource R1 and requests R2, while Process P2 holds Resource R2 and requests R1. Each process waits for the other to release resources, resulting in a mutual permanent standstill (&ldquo;Deadlock&rdquo;).
-          </p>
-          <ul class="point-list">
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Method 1: Break Hold and Wait &mdash;</strong> Require a process to request all required resources simultaneously before execution begins. If any resource cannot be allocated, the process releases all held resources and waits.</span></li>
-            <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Method 2: Break Circular Wait &mdash;</strong> Enforce a strict linear ordering (numbering) on all resources. Processes must request resources only in strictly ascending numerical order, preventing any circular cycle.</span></li>
-          </ul>
-        </div>
+        <!-- Point-to-Point Summary -->
+        <ul class="point-list" style="margin-top: 14px;">
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Deadlock Occurrence Scenario:</strong> Process P1 holds Resource R1 and requests R2; simultaneously, Process P2 holds Resource R2 and requests R1. Neither can proceed, yielding a <em>mutual permanent standstill</em>.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Method 1: Break Hold and Wait &mdash;</strong> Require processes to request and acquire all required resources simultaneously before execution. If even one resource is unavailable, none are allocated, and the process releases all held resources and waits.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>Method 2: Break Circular Wait &mdash;</strong> Enforce a strict global numerical ordering $F(R)$ across all resources. Processes must request resources only in strictly ascending numerical order ($F(R_j) &gt; F(R_i)$), structurally eliminating circular wait cycles.</span></li>
+        </ul>
+      </div>
 
-        <!-- Q12 -->
-        <div class="qa-block">
-          <div class="qa-question"><span class="q-badge">Q12</span> Missing report.txt Diagnostic Workflow</div>
-          <p style="font-size: 0.9rem; color: var(--tx-muted); margin-bottom: 8px;">
-            A user cannot find <code>report.txt</code>. Required diagnostic commands and permission inspection:
-          </p>
+      <!-- Q13: Missing report.txt Diagnostic Workflow (Code + Live Run on Site) -->
+      <div class="qa-block">
+        <div class="qa-question"><span class="q-badge">Q13</span> Missing report.txt Diagnostic Investigation Workflow</div>
+        <ul class="point-list" style="margin-bottom: 14px;">
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>1. Identify Active User:</strong> <code>whoami</code> verifies current shell session identity.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>2. Print Working Directory:</strong> <code>pwd</code> establishes current directory context.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>3. System-Wide Search:</strong> <code>find / -type f -name "report.txt" 2&gt;/dev/null</code> locates missing file.</span></li>
+          <li class="point-item"><span class="point-bullet">&bull;</span><span class="point-text"><strong>4. Permission Audit:</strong> <code>ls -l /home/student/documents/report.txt</code> checks read/write bits.</span></li>
+        </ul>
+
+        <div class="code-and-output-grid">
+          <!-- Code Presentation -->
+          <div class="code-box">
+            <div class="code-box-header">
+              <span>diagnose_missing_file.sh</span>
+              <button class="btn-copy" onclick="copyCode('q13CodeText', this)">Copy Code</button>
+            </div>
+            <div class="code-box-body" id="q13CodeText"><span style="color:var(--tx-muted);">#!/bin/bash</span>
+<span style="color:var(--tx-muted);"># Diagnostic Investigation Script</span>
+
+echo <span style="color:var(--green);">"[Step 1] Current User Identity:"</span>
+whoami
+
+echo <span style="color:var(--green);">"[Step 2] Current Working Directory:"</span>
+pwd
+
+echo <span style="color:var(--green);">"[Step 3] Crawling Root Filesystem:"</span>
+find / -type f -name <span style="color:var(--green);">'report.txt'</span> 2>/dev/null
+
+echo <span style="color:var(--green);">"[Step 4] Inspecting Permissions &amp; Metadata:"</span>
+ls -l /home/student/documents/report.txt</div>
+          </div>
+
+          <!-- Live Output Presentation -->
           <div class="terminal-box">
             <div class="terminal-header">
-              <span class="term-dot red"></span><span class="term-dot yellow"></span><span class="term-dot green"></span>
-              <span class="term-title">Diagnostic Terminal Session</span>
+              <div class="term-dots-group">
+                <span class="term-dot red"></span><span class="term-dot yellow"></span><span class="term-dot green"></span>
+                <span class="term-title">Terminal Output: Q13 Runner</span>
+              </div>
+              <span class="term-status" id="q13Status">Ready</span>
             </div>
-            <div class="terminal-body"><span class="output"># 1. Identify logged-in user</span>
-<span class="prompt">$</span> whoami
-student
-
-<span class="output"># 2. Display current working directory</span>
-<span class="prompt">$</span> pwd
-/home/student
-
-<span class="output"># 3. Search entire filesystem for missing file</span>
-<span class="prompt">$</span> find / -type f -name 'report.txt' 2>/dev/null
-/home/student/documents/report.txt
-
-<span class="output"># 4. Check detailed file permissions</span>
-<span class="prompt">$</span> ls -l /home/student/documents/report.txt
--rw-r--r-- 1 student student 124 Oct 26 12:00 report.txt</div>
-          </div>
-          <div class="calc-banner">
-            <div><strong>Permission Decoding (<code>-rw-r--r--</code>):</strong></div>
-            <div>&bull; File Type: <code>-</code> (Regular File)</div>
-            <div>&bull; User (Owner): <code>rw-</code> (Read + Write)</div>
-            <div>&bull; Group: <code>r--</code> (Read-Only)</div>
-            <div>&bull; Others: <code>r--</code> (Read-Only)</div>
+            <div class="terminal-body" id="q13TermBody"><span class="prompt">student@adypu-linux:~$</span> <span class="cmd">./diagnose_missing_file.sh</span>
+<span class="output"># Click "▶ Run Code" to execute all 4 investigation steps.</span></div>
+            <div class="terminal-actions">
+              <button class="btn-run" id="q13RunBtn">▶ Run Code</button>
+              <span style="font-size:0.75rem; color:var(--tx-muted); font-family:var(--font-mono);">Exit Code 0</span>
+            </div>
           </div>
         </div>
-      </section>
 
-    </main>
-  </div>
+        <div class="calc-banner">
+          <div><strong>Permission String Decoding (<code>-rw-r--r--</code>):</strong></div>
+          <div>&bull; File Type: <code>-</code> (Regular File) | Owner (student): <code>rw-</code> (Read + Write)</div>
+          <div>&bull; Group (student): <code>r--</code> (Read-Only) | Others (World): <code>r--</code> (Read-Only)</div>
+        </div>
+      </div>
+    </section>
 
+    <!-- ========================================================================= -->
+    <!-- 3D Animation Thank You Page (Three.js 3D Universe + Rotating Geometry) -->
+    <!-- (Cleaned: Removed Academic Report Completed badge & Removed Submission word) -->
+    <!-- ========================================================================= -->
+    <section class="thankyou-card" id="thankyou">
+      <div class="thankyou-canvas-wrap" id="thankyouCanvasWrap">
+        <!-- Three.js Canvas Injected Here -->
+        <div class="thankyou-content">
+          <h2 class="thankyou-title">THANK YOU</h2>
+          <p class="thankyou-subtitle">Next Generation Operating Systems • Assignment</p>
+          <div class="thankyou-student">
+            Makwana Tusharbhai Shantibhai &bull; URN: E26M02F2221<br>
+            <span style="opacity: 0.8; font-size: 0.78rem;">MCA(FY) - AIDS &bull; School of Engineering, ADYPU Pune</span>
+          </div>
+          <div class="thankyou-actions">
+            <a href="#cover" class="btn-action">Back to Top</a>
+            <button class="btn-action" onclick="window.print()">Print / Export PDF</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global Academic Footer -->
   <footer>
-    <p>Ajeenkya DY Patil University • School of Engineering</p>
-    <p style="margin-top: 4px; font-size: 0.78rem; opacity: 0.7;">Next Generation Operating Systems (NGOS) • Assignment 1 • Academic Year 2026 – 2027</p>
+    <p><strong>Ajeenkya DY Patil University</strong></p>
+    <p style="margin-top: 4px; font-size: 0.78rem; opacity: 0.75;">
+      Next Generation Operating Systems (NGOS)
+    </p>
+    <p style="margin-top: 4px; font-size: 0.75rem; color: var(--cyan);">
+      Makwana Tusharbhai Shantibhai (URN: E26M02F2221) &bull; Faculty: Indu Kumari
+    </p>
   </footer>
 
-  <script>
-    // Theme Switcher Logic
-    const themeBtn = document.getElementById('themeBtn');
-    const themeIcon = document.getElementById('themeIcon');
-    const themeText = document.getElementById('themeText');
-    const htmlEl = document.documentElement;
-
-    themeBtn.addEventListener('click', () => {
-      const currentTheme = htmlEl.getAttribute('data-theme');
-      if (currentTheme === 'dark') {
-        htmlEl.setAttribute('data-theme', 'light');
-        themeIcon.textContent = '🌙';
-        themeText.textContent = 'Dark Mode';
-      } else {
-        htmlEl.setAttribute('data-theme', 'dark');
-        themeIcon.textContent = '☀️';
-        themeText.textContent = 'Light Mode';
-      }
-    });
-  </script>
+  <!-- ========================================================================= -->
+  <!-- JavaScript Implementation: Controls, Interactive Runners & 3D Animations -->
+  <!-- ========================================================================= -->
+    <!-- External Interactive & Animation Logic -->
+  <script src="animation.js"></script>
 </body>
 </html>
